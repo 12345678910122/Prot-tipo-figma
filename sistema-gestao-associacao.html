@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestão - Estendendo as Mãos Para as Mulheres</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #7C3AED;
+            --primary-dark: #6D28D9;
+            --primary-light: #A78BFA;
+            --white: #FFFFFF;
+            --gray-50: #F9FAFB;
+            --gray-100: #F3F4F6;
+            --gray-200: #E5E7EB;
+            --gray-300: #D1D5DB;
+            --gray-700: #374151;
+            --gray-800: #1F2937;
+            --gray-900: #111827;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--gray-50);
+            color: var(--gray-800);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            padding: 1.5rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        .logo-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: var(--white);
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: var(--primary);
+        }
+
+        button, a.btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.65rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: var(--white);
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--gray-100);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--gray-100);
+        }
+
+        .page {
+            display: none;
+            min-height: 100vh;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .section {
+            padding: 3rem 0;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--primary);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 0.65rem;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--primary);
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            transform: translateY(-4px);
+        }
+
+        .card h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+
+        .sidebar {
+            background: var(--white);
+            width: 100%;
+            max-width: 250px;
+            padding: 1.5rem;
+            border-radius: 0.65rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .sidebar {
+                width: 250px;
+                margin-bottom: 0;
+            }
+            .dashboard-layout {
+                display: flex;
+                gap: 2rem;
+            }
+            .dashboard-content {
+                flex: 1;
+            }
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-menu button {
+            width: 100%;
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border: none;
+            background: transparent;
+            color: var(--gray-700);
+            cursor: pointer;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .sidebar-menu button:hover {
+            background-color: var(--gray-100);
+        }
+
+        .sidebar-menu button.active {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+
+        form {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 0.65rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--gray-700);
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+        }
+
+        .search-container {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-input {
+            padding-left: 2.5rem;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-700);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--white);
+            border-radius: 0.65rem;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        thead {
+            background-color: var(--gray-100);
+            border-bottom: 2px solid var(--primary);
+        }
+
+        th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        tbody tr:hover {
+            background-color: var(--gray-50);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background-color: #DCFCE7;
+            color: #166534;
+        }
+
+        .status-pending {
+            background-color: #FEF3C7;
+            color: #92400E;
+        }
+
+        .status-available {
+            background-color: #DBEAFE;
+            color: #1E40AF;
+        }
+
+        footer {
+            background: var(--gray-900);
+            color: var(--white);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .success-message {
+            background: #DCFCE7;
+            border-left: 4px solid #16A34A;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+            color: #166534;
+        }
+
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page (Página Inicial do Sistema) -->
+    <div id="login" class="page active">
+        <header>
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <div class="logo-icon">❤️</div>
+                        <span>Estendendo as Mãos</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div style="min-height: 80vh; display: flex; align-items: center; justify-content: center; padding: 1rem;">
+            <form style="max-width: 400px; width: 100%;">
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <div class="logo-icon" style="width: 4rem; height: 4rem; font-size: 2rem; margin: 0 auto 1rem;">❤️</div>
+                    <h1 style="color: var(--primary); margin-bottom: 0.5rem;">Estendendo as Mãos</h1>
+                    <p style="color: var(--gray-700);">Sistema de Gestão Interna</p>
+                </div>
+
+                <div class="form-group">
+                    <label>Usuário</label>
+                    <input type="text" placeholder="Digite seu usuário">
+                </div>
+
+                <div class="form-group">
+                    <label>Senha</label>
+                    <input type="password" placeholder="Digite sua senha">
+                </div>
+
+                <div class="form-buttons">
+                    <button type="button" class="btn btn-primary" style="width: 100%;" onclick="handleLogin()">Entrar no Sistema</button>
+                </div>
+
+                <p style="text-align: center; font-size: 0.875rem; color: var(--gray-700); margin-top: 1rem;">Acesso restrito a colaboradores autorizados.</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard Administrativo -->
+    <div id="dashboard-admin" class="page">
+        <header>
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <div class="logo-icon">❤️</div>
+                        <h1 style="font-size: 1.5rem;">Dashboard Administrativo</h1>
+                    </div>
+                    <button class="btn btn-secondary" onclick="navigate('login')">Sair</button>
+                </div>
+            </div>
+        </header>
+
+        <div class="container" style="padding: 2rem 1rem;">
+            <div class="dashboard-layout">
+                <div class="sidebar">
+                    <h3 style="color: var(--primary); margin-bottom: 1rem;">Menu Principal</h3>
+                    <ul class="sidebar-menu">
+                        <li><button onclick="navigate('dashboard-admin')" class="active">Dashboard</button></li>
+                        <li><button onclick="navigate('cadastro-mulheres')">Cadastrar Mulher</button></li>
+                        <li><button onclick="navigate('registro-servico')">Registrar Serviço Social</button></li>
+                        <li><button onclick="navigate('analise-intervencao')">Análise e Intervenção</button></li>
+                        <li><button onclick="navigate('gestao-colaboradores')">Colaboradores</button></li>
+                        <li><button onclick="navigate('gestao-suprimentos')">Suprimentos</button></li>
+                    </ul>
+                </div>
+
+                <div class="dashboard-content">
+                    <h2 style="margin-bottom: 0.5rem;">Bem-vindo ao Sistema</h2>
+                    <p style="color: var(--gray-700); margin-bottom: 2rem;">Visão geral das operações e atendimentos da associação.</p>
+
+                    <div class="grid">
+                        <button class="card" style="border: none; text-align: left; cursor: pointer;" onclick="navigate('cadastro-mulheres')">
+                            <h4>👥 Cadastrar Mulher</h4>
+                            <p>Registre uma nova mulher atendida</p>
+                        </button>
+                        <button class="card" style="border: none; text-align: left; cursor: pointer;" onclick="navigate('registro-servico')">
+                            <h4>📄 Registrar Serviço</h4>
+                            <p>Documente o atendimento realizado</p>
+                        </button>
+                        <button class="card" style="border: none; text-align: left; cursor: pointer;" onclick="navigate('analise-intervencao')">
+                            <h4>📊 Análise e Intervenção</h4>
+                            <p>Avalie a situação das mulheres</p>
+                        </button>
+                        <button class="card" style="border: none; text-align: left; cursor: pointer;" onclick="navigate('gestao-colaboradores')">
+                            <h4>👥 Colaboradores</h4>
+                            <p>Gerencie voluntários e colaboradores</p>
+                        </button>
+                        <button class="card" style="border: none; text-align: left; cursor: pointer;" onclick="navigate('gestao-suprimentos')">
+                            <h4>📦 Suprimentos</h4>
+                            <p>Controle estoque e doações</p>
+                        </button>
+                        <button class="card" style="border: none; text-align: left; cursor: pointer;">
+                            <h4>📊 Relatórios</h4>
+                            <p>Visualize estatísticas</p>
+                        </button>
+                    </div>
+
+                    <div style="margin-top: 3rem;">
+                        <div class="flex-between" style="margin-bottom: 1rem;">
+                            <h3 style="color: var(--primary);">Mulheres Atendidas (Resumo)</h3>
+                            <div class="search-container" style="margin-bottom: 0; width: 300px;">
+                                <span class="search-icon">🔍</span>
+                                <input type="text" class="search-input" placeholder="Buscar por nome ou ID..." onkeyup="filterTable(this, 'table-mulheres')">
+                            </div>
+                        </div>
+                        <table id="table-mulheres">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nome</th>
+                                    <th>Contato</th>
+                                    <th>Data de Cadastro</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>001</td>
+                                    <td>Maria Silva</td>
+                                    <td>(16) 99999-0001</td>
+                                    <td>01/05/2025</td>
+                                    <td><span class="status-badge status-active">Ativo</span></td>
+                                </tr>
+                                <tr>
+                                    <td>002</td>
+                                    <td>Ana Santos</td>
+                                    <td>(16) 99999-0002</td>
+                                    <td>02/05/2025</td>
+                                    <td><span class="status-badge status-active">Ativo</span></td>
+                                </tr>
+                                <tr>
+                                    <td>003</td>
+                                    <td>Paula Costa</td>
+                                    <td>(16) 99999-0003</td>
+                                    <td>03/05/2025</td>
+                                    <td><span class="status-badge status-pending">Em Acompanhamento</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cadastro de Mulheres -->
+    <div id="cadastro-mulheres" class="page">
+        <header>
+            <div class="container">
+                <h1 style="font-size: 1.5rem;">Cadastrar Mulher</h1>
+            </div>
+        </header>
+
+        <div class="container" style="padding: 2rem 1rem; max-width: 600px;">
+            <form>
+                <div class="form-group">
+                    <label>Nome Completo *</label>
+                    <input type="text" placeholder="Digite o nome completo" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Contato (Telefone/Email) *</label>
+                    <input type="text" placeholder="(16) 99999-9999 ou email@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Endereço</label>
+                    <input type="text" placeholder="Rua, número, bairro, cidade">
+                </div>
+
+                <div class="form-group">
+                    <label>Documentação (CPF, RG, etc)</label>
+                    <input type="text" placeholder="Informações de documentação">
+                </div>
+
+                <div class="form-group">
+                    <label>Histórico / Observações</label>
+                    <textarea placeholder="Descreva o histórico e situação atual" style="width: 100%; min-height: 120px; padding: 0.75rem; border: 1px solid var(--gray-300); border-radius: 0.5rem;"></textarea>
+                </div>
+
+                <div class="form-buttons">
+                    <button type="button" class="btn btn-outline" onclick="navigate('dashboard-admin')">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="showSuccess('Cadastro realizado com sucesso!'); setTimeout(() => navigate('dashboard-admin'), 1500);">Salvar Cadastro</button>
+                </div>
+
+                <p style="text-align: center; font-size: 0.875rem; color: var(--gray-700); margin-top: 1rem;">* Campos obrigatórios</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Registro de Serviço Social -->
+    <div id="registro-servico" class="page">
+        <header>
+            <div class="container">
+                <h1 style="font-size: 1.5rem;">Registrar Serviço Social</h1>
+            </div>
+        </header>
+
+        <div class="container" style="padding: 2rem 1rem; max-width: 600px;">
+            <form>
+                <div class="form-group">
+                    <label>Mulher Atendida *</label>
+                    <select required>
+                        <option value="">Selecione a mulher</option>
+                        <option value="1">Maria Silva</option>
+                        <option value="2">Ana Santos</option>
+                        <option value="3">Paula Costa</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Data do Atendimento *</label>
+                    <input type="date" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Tipo de Serviço *</label>
+                    <select required>
+                        <option value="">Selecione o serviço</option>
+                        <option value="acolhimento">Acolhimento Inicial</option>
+                        <option value="orientacao">Orientação Jurídica</option>
+                        <option value="psicologico">Apoio Psicológico</option>
+                        <option value="doacao">Entrega de Mantimentos</option>
+                        <option value="encaminhamento">Encaminhamento Externo</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Descrição do Atendimento</label>
+                    <textarea placeholder="Descreva detalhadamente o que foi realizado" style="width: 100%; min-height: 120px; padding: 0.75rem; border: 1px solid var(--gray-300); border-radius: 0.5rem;"></textarea>
+                </div>
+
+                <div class="form-buttons">
+                    <button type="button" class="btn btn-outline" onclick="navigate('dashboard-admin')">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="showSuccess('Serviço registrado com sucesso!'); setTimeout(() => navigate('dashboard-admin'), 1500);">Registrar</button>
+                </div>
+
+                <p style="text-align: center; font-size: 0.875rem; color: var(--gray-700); margin-top: 1rem;">* Campos obrigatórios</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Análise e Intervenção -->
+    <div id="analise-intervencao" class="page">
+        <header>
+            <div class="container">
+                <h1 style="font-size: 1.5rem;">Análise e Intervenção Social</h1>
+            </div>
+        </header>
+
+        <div class="container" style="padding: 2rem 1rem; max-width: 600px;">
+            <form>
+                <div class="form-group">
+                    <label>Nome da Mulher *</label>
+                    <input type="text" placeholder="Digite o nome" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Data da Análise *</label>
+                    <input type="date" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Nível de Vulnerabilidade *</label>
+                    <select required>
+                        <option value="">Selecione o nível</option>
+                        <option value="baixo">Baixo</option>
+                        <option value="medio">Médio</option>
+                        <option value="alto">Alto</option>
+                        <option value="critico">Crítico</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Situação Atual</label>
+                    <textarea placeholder="Descreva a situação atual da mulher" style="width: 100%; min-height: 100px; padding: 0.75rem; border: 1px solid var(--gray-300); border-radius: 0.5rem;"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Plano de Intervenção</label>
+                    <textarea placeholder="Descreva o plano de intervenção proposto" style="width: 100%; min-height: 100px; padding: 0.75rem; border: 1px solid var(--gray-300); border-radius: 0.5rem;"></textarea>
+                </div>
+
+                <div class="form-buttons">
+                    <button type="button" class="btn btn-outline" onclick="navigate('dashboard-admin')">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="showSuccess('Análise salva com sucesso!'); setTimeout(() => navigate('dashboard-admin'), 1500);">Salvar Análise</button>
+                </div>
+
+                <p style="text-align: center; font-size: 0.875rem; color: var(--gray-700); margin-top: 1rem;">* Campos obrigatórios</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Gestão de Colaboradores -->
+    <div id="gestao-colaboradores" class="page">
+        <header>
+            <div class="container">
+                <h1 style="font-size: 1.5rem;">Gestão de Colaboradores</h1>
+            </div>
+        </header>
+
+        <div class="container" style="padding: 2rem 1rem;">
+            <div class="flex-between" style="margin-bottom: 2rem;">
+                <h2>Lista de Colaboradores</h2>
+                <div style="display: flex; gap: 1rem; align-items: center;">
+                    <div class="search-container" style="margin-bottom: 0; width: 300px;">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" class="search-input" placeholder="Buscar colaborador..." onkeyup="filterTable(this, 'table-colaboradores')">
+                    </div>
+                    <button class="btn btn-primary">+ Novo Colaborador</button>
+                </div>
+            </div>
+
+            <table id="table-colaboradores">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Função</th>
+                        <th>Contato</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>João Silva</td>
+                        <td>Voluntário</td>
+                        <td>(16) 98888-1111</td>
+                        <td><span class="status-badge status-active">Ativo</span></td>
+                        <td><button class="btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.875rem;">Editar</button></td>
+                    </tr>
+                    <tr>
+                        <td>Carla Santos</td>
+                        <td>Coordenadora</td>
+                        <td>(16) 98888-2222</td>
+                        <td><span class="status-badge status-active">Ativo</span></td>
+                        <td><button class="btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.875rem;">Editar</button></td>
+                    </tr>
+                    <tr>
+                        <td>Pedro Costa</td>
+                        <td>Voluntário</td>
+                        <td>(16) 98888-3333</td>
+                        <td><span class="status-badge status-available">Disponível</span></td>
+                        <td><button class="btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.875rem;">Editar</button></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="form-buttons" style="margin-top: 2rem; max-width: 200px;">
+                <button class="btn btn-outline" onclick="navigate('dashboard-admin')">Voltar ao Dashboard</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gestão de Suprimentos -->
+    <div id="gestao-suprimentos" class="page">
+        <header>
+            <div class="container">
+                <h1 style="font-size: 1.5rem;">Gestão de Suprimentos</h1>
+            </div>
+        </header>
+
+        <div class="container" style="padding: 2rem 1rem;">
+            <div class="flex-between" style="margin-bottom: 2rem;">
+                <h2>Estoque e Doações</h2>
+                <div style="display: flex; gap: 1rem; align-items: center;">
+                    <div class="search-container" style="margin-bottom: 0; width: 300px;">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" class="search-input" placeholder="Buscar item..." onkeyup="filterTable(this, 'table-suprimentos')">
+                    </div>
+                    <button class="btn btn-primary">+ Registrar Entrada</button>
+                </div>
+            </div>
+
+            <table id="table-suprimentos">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Categoria</th>
+                        <th>Quantidade</th>
+                        <th>Validade</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Arroz</td>
+                        <td>Alimento</td>
+                        <td>50 kg</td>
+                        <td>12/2025</td>
+                        <td><span class="status-badge status-active">OK</span></td>
+                    </tr>
+                    <tr>
+                        <td>Feijão</td>
+                        <td>Alimento</td>
+                        <td>30 kg</td>
+                        <td>11/2025</td>
+                        <td><span class="status-badge status-active">OK</span></td>
+                    </tr>
+                    <tr>
+                        <td>Sabonete</td>
+                        <td>Higiene</td>
+                        <td>20 un</td>
+                        <td>-</td>
+                        <td><span class="status-badge status-pending">Baixo</span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="form-buttons" style="margin-top: 2rem; max-width: 200px;">
+                <button class="btn btn-outline" onclick="navigate('dashboard-admin')">Voltar ao Dashboard</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function navigate(pageId) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+
+            const selectedPage = document.getElementById(pageId);
+            if (selectedPage) {
+                selectedPage.classList.add('active');
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function handleLogin() {
+            // Simulação de login direto para o dashboard
+            navigate('dashboard-admin');
+        }
+
+        function filterTable(input, tableId) {
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById(tableId);
+            const trs = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < trs.length; i++) {
+                let found = false;
+                const tds = trs[i].getElementsByTagName('td');
+                for (let j = 0; j < tds.length; j++) {
+                    if (tds[j].textContent.toLowerCase().indexOf(filter) > -1) {
+                        found = true;
+                        break;
+                    }
+                }
+                trs[i].style.display = found ? '' : 'none';
+            }
+        }
+
+        function showSuccess(message) {
+            const successDiv = document.createElement('div');
+            successDiv.className = 'success-message';
+            successDiv.style.position = 'fixed';
+            successDiv.style.top = '20px';
+            successDiv.style.right = '20px';
+            successDiv.style.maxWidth = '400px';
+            successDiv.style.zIndex = '1000';
+            successDiv.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <span style="font-size: 1.5rem;">✓</span>
+                    <span>${message}</span>
+                </div>
+            `;
+            document.body.appendChild(successDiv);
+
+            setTimeout(() => {
+                successDiv.remove();
+            }, 3000);
+        }
+
+        // Sidebar active state
+        document.addEventListener('click', function(e) {
+            if (e.target.tagName === 'BUTTON' && e.target.closest('.sidebar-menu')) {
+                document.querySelectorAll('.sidebar-menu button').forEach(btn => btn.classList.remove('active'));
+                e.target.classList.add('active');
+            }
+        });
+    </script>
+</body>
+</html>
